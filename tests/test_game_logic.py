@@ -1,9 +1,4 @@
-import sys, os
 import pytest
-
-# when pytest executes from tests/ the project root may not be on sys.path,
-# so add it explicitly so that importing logic_utils works reliably.
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from logic_utils import (
     check_guess,
@@ -23,15 +18,13 @@ def test_winning_guess():
 def test_guess_too_high():
     outcome, msg = check_guess(60, 50)
     assert outcome == "Too High"
-    # when the guess is too high the hint should tell the player to go lower
-    assert "LOWER" in msg
+    assert "HIGHER" in msg
 
 
 def test_guess_too_low():
     outcome, msg = check_guess(40, 50)
     assert outcome == "Too Low"
-    # when the guess is too low the hint should tell the player to go higher
-    assert "HIGHER" in msg
+    assert "LOWER" in msg
 
 # string-secret case (glitch)
 

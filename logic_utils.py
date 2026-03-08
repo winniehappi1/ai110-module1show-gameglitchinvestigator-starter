@@ -45,54 +45,32 @@ def check_guess(guess, secret):
     """
     Compare a guess to the secret value.
 
-    The application exercises a very odd glitch: on every second attempt the
-    secret is converted to a string.  ``check_guess`` used to rely on a
-    ``try/except`` around a numeric comparison which meant a string secret
-    triggered lexicographic ordering ("10" < "2").  The result was wildly
-    misleading hints.
-
-    To fix it we normalise both values by coercing anything that *looks like* an
-    integer back into an ``int`` before performing any comparisons.  This keeps
-    the exterior behaviour identical while making the logic resilient to the
-    type flip.
-
-    Args:
-        guess: the user's guess (usually an ``int`` from ``parse_guess``).
-        secret: the secret value, which may be an ``int`` or a string.
+    The secret may be stored as either an ``int`` or ``str``; the app sometimes
+    converts it to string as part of the intentional glitch.  We therefore allow
+    both kinds of comparisons.
 
     Returns:
-        ``(outcome, message)`` where ``outcome`` is one of ``"Win"``,
-        ``"Too High"`` or ``"Too Low"`` and ``message`` contains the hint
-        string with emojis.
+        A tuple ``(outcome, message)`` where ``outcome`` is one of
+        ``"Win"``, ``"Too High"`` or ``"Too Low"`` and ``message`` is the
+        accompanying hint text (used by the UI).  The hints deliberately use
+        emojis to make the game feel playful.
     """
 
-    def _normalise(x):
-        try:
-            return int(x)
-        except Exception:
-            return x
-
-    g = _normalise(guess)
-    s = _normalise(secret)
-
-    if g == s:
+    if guess == secret:
         return "Win", "🎉 Correct!"
 
-    # numeric comparison should now work even if one of the inputs was a
-    # string containing digits
     try:
-        if g > s:
-            # guess is higher than secret
-            return "Too High", "📉 Go LOWER!"
+        if guess > secret:
+            return "Too High", "📈 Go HIGHER!"
         else:
-            # guess is lower than secret
-            return "Too Low", "📈 Go HIGHER!"
-    except Exception:
-        # fall back to string comparison to at least return something sensible
-        if str(g) > str(s):
-            return "Too High", "📉 Go LOWER!"
-        else:
-            return "Too Low", "📈 Go HIGHER!"
+            return "Too Low", "📉 Go LOWER!"
+    except TypeError:
+        g = str(guess)
+        if g == secret:
+            return "Win", "🎉 Correct!"
+        if g > secret:
+            return "Too High", "📈 Go HIGHER!"
+        return "Too Low", "📉 Go LOWER!"
 
 
 def update_score(current_score: int, outcome: str, attempt_number: int):

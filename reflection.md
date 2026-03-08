@@ -5,8 +5,9 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 ## 1. What was broken when you started?
 
 - What did the game look like the first time you ran it? very simple to understand
-- List at least two concrete bugs you noticed at the start  1 the number off attemps within each difficulties, and it does not properly say when to go higher or lower 2 it asks you to guess a number between 1 to 100 but ask you to guess -15
+- List at least two concrete bugs you noticed at the start  
   (for example: "the secret number kept changing" or "the hints were backwards").
+  1 the number off attemps within each difficulties, and it does not properly say when to go higher or lower 2 it asks you to guess a number between 1 to 100 but ask you to guess -15
 
 ---
 
@@ -24,6 +25,7 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - Describe at least one test you ran (manual or using pytest)  
   and what it showed you about your code.
 - Did AI help you design or understand any tests? How? Yes buy giving suggestions and creating new functions
+
 
 ---
 

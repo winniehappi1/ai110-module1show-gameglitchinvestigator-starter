@@ -106,11 +106,10 @@ if submit:
     else:
         st.session_state.history.append(guess_int)
 
-        # the secret should always be treated as a number; earlier versions
-        # of the app tried converting it to a string on alternating guesses
-        # which forced the comparison logic to do lexicographic checks and
-        # produced wildly inaccurate hints.  We no longer modify its type.
-        secret = st.session_state.secret
+        if st.session_state.attempts % 2 == 0:  # FIXME: Logic breaks here
+            secret = str(st.session_state.secret)
+        else:
+            secret = st.session_state.secret
 
         outcome, message = check_guess(guess_int, secret)
 
